@@ -1,0 +1,951 @@
+<div class="tab-content">
+ <div class="tab-pane" id="hom">
+  <table class="views-table cols-9 responsiveTable">
+   <thead>
+    <tr>
+     <th scope="col">
+      S.no
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Subject
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Issued By
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Issued Date
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Language
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      File Type
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Size
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Download/View
+     </th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      1
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      General Financial Rules 2017
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Dept. of Expenditure
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      11-Feb-2017
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      3.52MB
+     </td>
+     <td class="views-field views-field-title" data-label="Download/View">
+      <a href="http://doe.gov.in/sites/default/files/GFR2017_0.pdf" rel="noopener noreferrer" target="_blank">
+       <img alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png" title="view"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      2
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      Manual for Procurement of Consultancy and Other Services 2017(3.53MB pdf)
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Dept. of Expenditure
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      18-Apr-2017
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      3.53MB
+     </td>
+     <td class="views-field views-field-title" data-label="Download/View">
+      <a href="http://doe.gov.in/sites/default/files/Manual%20for%20Procurement%20of%20Consultancy%20and%20Other%20Services%202017_0.pdf" rel="noopener noreferrer" target="_blank">
+       <img alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png" title="view"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      3
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      Manual for Procurement of Goods 2017(3.32MB pdf)
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Dept. of Expenditure
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      05-Apr-2017
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      3.32MB
+     </td>
+     <td class="views-field views-field-title" data-label="Download/View">
+      <a href="http://doe.gov.in/sites/default/files/Manual%20for%20Procurement%20of%20Goods%202017_0_0.pdf" rel="noopener noreferrer" target="_blank">
+       <img alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png" title="view"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      4
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      CPWD procurement procedures and manuals(1.56MB pdf)
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Dept. of Expenditure
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      01-Jul-2014
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      1.56MB
+     </td>
+     <td class="views-field views-field-title" data-label="Download/View">
+      <a href="http://cpwd.gov.in/Publication/worksmanual2014.PDF" rel="noopener noreferrer" target="_blank">
+       <img alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png" title="view"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      5
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      General Financial Rules 2005(975KB pdf)
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Dept. of Expenditure
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      01-Jul-2005
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      975KB
+     </td>
+     <td class="views-field views-field-title" data-label="Download/View">
+      <a href="http://finmin.nic.in/sites/default/files/GFR2005_1.pdf?download=1" rel="noopener noreferrer" target="_blank">
+       <img alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png" title="view"/>
+      </a>
+     </td>
+    </tr>
+   </tbody>
+  </table>
+ </div>
+ <div class="tab-pane active" id="profile1">
+  <table class="views-table cols-9 responsiveTable">
+   <thead>
+    <tr>
+     <th scope="col">
+      S.no
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Subject
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Issued By
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Issued Date
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Language
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      File Type
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Size
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Download/View
+     </th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      1
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      IT Amendment Act 2008
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Ministry of Law and Justice
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      05-Feb-2009
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      2.29 MB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtMTk4NzY=" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      1
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      IT ACT 2000
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Legislative Department
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      09-Jun-2000
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      244.83 KB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtMjk4NzY=" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+   </tbody>
+  </table>
+ </div>
+ <div class="tab-pane" id="messages">
+  <table class="views-table cols-9 responsiveTable">
+   <thead>
+    <tr>
+     <th scope="col">
+      S.no
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Subject
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Issued By
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Issued Date
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Language
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      File Type
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Size
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Download/View
+     </th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      1
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      Revised format for registration of bidders from ries sharing land border with lndia- regarding
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Department for Promotion of Industry and Internal Trade
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      28-Apr-2023
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      1.89 MB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtMTc5ODc4" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      2
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      Common Examples of Restrictive and Discriminatory Conditions Against the Local Suppliers (Public Procurement Preference-MII order 2017)
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Department for Promotion of Industry and Internal Trade
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      20-Dec-2022
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      1.29 MB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtMTY5ODc4" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      3
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      Online Portal for Lodging Grievances for alleged violation of PPP-MII Orders-2017
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Dept  for Promotion of Industry and Internal Trade
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      05-May-2021
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      469.75 KB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtMTU5ODc4" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      4
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      Public Procurement (Preference to Make in India), Order 2017- Revision
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Min. of Commerce
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      16-Sep-2020
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      1.25 MB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtMTg5ODc4" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      5
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      Uploading of Format for registration of bidders from countries which shares land
+border with India on CPP Portal and GeM Portal
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Dept. of Promotion of Industry and Internal Trade
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      31-Aug-2020
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      186.41 KB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtMTM5ODc4" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      6
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      Format for registration of bidders under rule 144 (xi) GFR
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Min. of Commerce
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      28-Aug-2020
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      1.99 MB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtMTQ5ODc4" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      7
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      OM-Withdrawing the facility of submission of price bid dated 18th October 2018
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Dept. of Expenditure
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      18-Oct-2018
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      257.87 KB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtMTE5ODc4" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      8
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      DoE Circular on Bid Extension after Bid Opening dated 24th November 2014
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Dept. of Expenditure
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      24-Nov-2014
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      101.64 KB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtODk4Nzg=" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      9
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      OM-Implementation of Comprehensive end to end eProcurement dt. 9th Jan 2014
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Dept. of Expenditure
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      09-Jan-2014
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      344.8 KB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtMTk4Nzg=" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      10
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      OM - Compliance of eProcurement Systems with DIT guidelines on Quality requirements dated 3rd Septembet 2012
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Dept. of Expenditure
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      03-Sep-2012
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      69.65 KB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtMjk4Nzg=" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      11
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      Public Procurement Policy for Micro, Small and Medium Enterprises (MSMEs) Order, 2012 dt. 23rd Mar 2012
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Min. of Micro,Small &amp; Medium Exterprises
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      23-Mar-2012
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      136.93 KB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtNDk4Nzg=" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      12
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      MSME-Public Procurement Policy for Micros and Small Enterprises order dated 23rd March 2012
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Min. of Micro,Small &amp; Medium Exterprises
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      23-Mar-2012
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      3.16 MB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtMTA5ODc4" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      13
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      Preference to domestically manufactured electronic goods in procurement due to security consideration and in Govt. procurement Notification dt. 10th Feb 2012
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Dept. of Information Technology
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      10-Feb-2012
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      10.51 MB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtMzk4Nzg=" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      14
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      CVC Guidelines
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Eprocurement Guidelines
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      11-Sep-2003
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      889.85 KB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtNTk4Nzg=" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+   </tbody>
+  </table>
+ </div>
+ <div class="tab-pane" id="emc">
+  <table class="views-table cols-9 responsiveTable">
+   <thead>
+    <tr>
+     <th scope="col">
+      S.no
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Subject
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Issued By
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Issued Date
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Language
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      File Type
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Size
+     </th>
+     <th class="views-field views-field-title" scope="col">
+      Download/View
+     </th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      1
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      DoE-OM-eAuction24Aug2016
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Dept. of Expenditure
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      24-Aug-2016
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      18.93 KB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtMTk4NzM=" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      2
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      DoE-OM on EMC Recommendation DMRC-related 24 Aug2016
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Dept. of Expenditure
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      24-Aug-2016
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      19.74 KB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtMjk4NzM=" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      3
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      OM_QualifyingCriteria04Aug2016
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Dept. of Expenditure
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      04-Aug-2016
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      19.02 KB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtNzk4NzM=" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      4
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      OM_LikelySources_04Aug2016
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Dept. of Expenditure
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      04-Aug-2016
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      21.45 KB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtNjk4NzM=" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      5
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      OM_Empowered_Project_Team_04Aug2016
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Dept. of Expenditure
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      04-Aug-2016
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      18.77 KB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtNTk4NzM=" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      6
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      OM_Buyback04Aug2016
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Dept. of Expenditure
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      04-Aug-2016
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      18.9 KB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtNDk4NzM=" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      7
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      OM_BuildingCapacity04Aug2016
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Dept. of Expenditure
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      04-Aug-2016
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      24.04 KB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtMzk4NzM=" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+    <tr>
+     <td class="views-field views-field-title" data-label="S.no">
+      8
+     </td>
+     <td class="views-field views-field-title" data-label="Subject">
+      OM_VariationClauses04Aug2016
+     </td>
+     <td class="views-field views-field-title" data-label="Issued By">
+      Dept. of Expenditure
+     </td>
+     <td class="views-field views-field-title" data-label="Issued Date">
+      04-Aug-2016
+     </td>
+     <td class="views-field views-field-title" data-label="Language">
+      English
+     </td>
+     <td class="views-field views-field-title" data-label="File Type">
+      pdf
+     </td>
+     <td class="views-field views-field-title" data-label="Size">
+      17.78 KB
+     </td>
+     <td class="language" data-label="Download/View">
+      <a class="mmppanel-title" href="https://eprocure.gov.in/cppp/rulesandprocs/kbadqkdlcswfjdelrquehwuxcfmijmuixngudufgbuubgubfugbububjxcgfvsbdihbgfGhdfgFHytyhRtODk4NzM=" rel="noopener noreferrer" target="_blank">
+       <img a="" alt="view" src="https://eprocure.gov.in/cppp/sites/default/files/images/view.png"/>
+      </a>
+     </td>
+    </tr>
+   </tbody>
+  </table>
+ </div>
+</div>
