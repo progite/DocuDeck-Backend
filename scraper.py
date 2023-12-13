@@ -7,47 +7,36 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+def download_file(filename: str, link: str):
+    with open(filename, 'wb') as file:
+        file.write(requests.get(link, verify=False).content)
 
-def extract_pdfs(url: str, query: str):
-    #see ssl verification
-    # url = "https://wbpwd.gov.in/ETender_Guideline"
-    # url = "https://powermin.gov.in/content/guidelines-resolutions-notifications-transmission"
-    # query = 'test'
-    folder_loc = r'C:\Users\progg\Desktop\desktop_p\DocuDeck\policies\\' + query
-    if not os.path.exists(folder_loc):
-        os.mkdir(folder_loc)
-
-    response = requests.get(url, verify=False)
-    # print(response)
-    soup = BeautifulSoup(response.text, "html.parser")
-    with open ('doc.txt', 'w', encoding = 'utf-8') as file:
-        file.write(str(list(link for link in soup.find_all('a'))))
-
+def extract_pdfs(base: str):
     
-    for link in soup.select("a[href$='.pdf']"):
-        filename = os.path.join(folder_loc,link['href'].split('/')[-1])
-        # print(filename)
-        with open(filename, 'wb') as f:
-            # print(filename)
-            f.write(requests.get(urljoin(url,link['href']), verify=False).content)
-
-#now search the web and go into the search results and extract the content from that page
-#search the web
-
-def search_web():
-    base = "https://eprocure.gov.in/cppp/"
     queries = ["rulesandprocs", "staterulesandprocs"]
-    
     for query in queries:
-        extract_pdfs(base + query, query)
-        # response = requests.get(base + query, verify=False)
-        # soup = BeautifulSoup(response.text, "html.parser")
-        # print(soup)
-# search_web()
-# extract_pdfs("")
+        url = base + query
+        folder_loc = ''
+        if not os.path.exists(folder_loc):
+            os.mkdir(folder_loc)
 
-def extract_nav_tabs():
-    url = "https://eprocure.gov.in/cppp/rulesandprocs"
+        response = requests.get(url, verify=False)
+        soup = BeautifulSoup(response.text, "html.parser")
+        
+        
+        for link in soup.select("a[href$='.pdf']"):
+            filename = os.path.join(folder_loc,link['href'].split('/')[-1])
+            download_file(filename, urljoin(url, link['href']))
+        
+        for idx, td_tag in enumerate(soup.find_all('td')):
+            a_tag = td_tag.find('a', href=True)
+            if a_tag:
+                filename = os.path.join(folder_loc, str(idx) + '.pdf')
+                download_file(filename, a_tag['href'])
+        
+extract_pdfs("https://eprocure.gov.in/cppp/")
+
+def extract_nav_tabs(url: str):
     driver = webdriver.Firefox()
     driver.get(url)
     
@@ -65,17 +54,13 @@ def extract_nav_tabs():
             file.write(str(soup.prettify()))
 
         
-        folder_loc = r'C:\Users\progg\Desktop\desktop_p\DocuDeck\policies\\' + str(idx)
+        folder_loc = ''
         if not os.path.exists(folder_loc):
             os.mkdir(folder_loc)
 
 
         for link in soup.select("a[href$='.pdf']"):
             filename = os.path.join(folder_loc,link['href'].split('/')[-1])
-            # print(filename)
-            with open(filename, 'wb') as f:
-                # print(filename)
-                f.write(requests.get(urljoin(url,link['href']), verify=False).content)
-
-        # print(soup.prettify())
-extract_nav_tabs()
+            download_file(filename, urljoin(url,link['href']))
+            
+# extract_nav_tabs()
