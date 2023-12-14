@@ -1,3 +1,7 @@
 beautifulsoup4
 urllib3
 selenium
+Flask-ext
+flask-mysql
+Flask-JWT-Extended
+Flask-MySQLdb
