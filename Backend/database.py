@@ -2,6 +2,11 @@
 import os
 from flask_mysqldb import MySQL
 from flask import current_app
+from password_utils import hash_password, check_password
+from constants import USER_1, USER_2, USER_3
+
+#Could have maintained combined db for all users with diff user types but then have to implement diff authorization rules. 
+#This is more compact
 
 class PolicyDB:
     def __init__(self, mysql: MySQL) -> None:
@@ -47,6 +52,7 @@ class PolicyDB:
             query = '''CREATE TABLE if not exists `POLICYMAKER`(
                 `pmId` VARCHAR(100) PRIMARY KEY, 
                 `pmName` VARCHAR(50), 
+                `pmEmail` VARCHAR(100),
                 `password` VARCHAR(100),
                 `deptId` VARCHAR(100),
                 FOREIGN KEY(`deptId`) REFERENCES `DEPARTMENT`(`deptId`))
@@ -95,6 +101,42 @@ class PolicyDB:
             cursor.execute(query)
         except Exception as e:
             print(e)
+    
+    def add_policymaker(self, pm_id: str, pm_email: str, pm_password: str):
+        try:
+            pm_password = hash_password(pm_password)
+            cursor = self.mysql.connection.cursor()
+            query = '''INSERT INTO POLICYMAKER(pmId, pmEmail, password) VALUES(%s, %s, %s)'''
+            cursor.execute(query, (pm_id, pm_email, pm_password))
+            self.mysql.connection.commit()
+            cursor.close()
+            return 1
+        
+        except Exception as e:
+            print(e)
+            return 0
+
+    def login(self, user_email, user_password, user_type):
+        try:
+            cursor = self.mysql.connection.cursor()
+            query_policy = '''SELECT password FROM POLICYMAKER WHERE pmEmail = %s'''
+            query_tender = '''SELECT password FROM TENDER_AUTHORITY WHERE taEmail = %s'''
+            if user_type == USER_1:
+                cursor.execute(query_policy, (user_email,))
+            elif user_type == USER_2:
+                cursor.execute(query_tender, (user_email,))
+            
+            account_password = cursor.fetchone()[0]
+            cursor.close()
+            
+            if check_password(user_password, account_password):
+                return 1
+            return 0
+        
+        except Exception as e:
+            print(e)
+            return 0
+
     def add_policy(self, pm_id, policy, policyname):
         try:
             policy_fol = r"C:\Users\progg\Desktop\desktop_p\DocuDeck\Scraper\policies\\rulesandprocs"
@@ -157,6 +199,7 @@ class TenderDB:
             query = '''CREATE TABLE if not exists `TENDER_AUTHORITY` (
                 `taId` VARCHAR(100) PRIMARY KEY, 
                 `taName` VARCHAR(50), 
+                `taEmail` VARCHAR(100),
                 `password` VARCHAR(100),
                 `sector` ENUM('government', 'private'))'''
             cursor.execute(query)
@@ -211,10 +254,6 @@ class TenderDB:
         except Exception as e:
             print("[DEBUG]", e)
             return 0
-    
-
-    def store_tender(self, ):
-        pass
 
 # class BidderDB:
     # def __init__(self, mysql) -> None:

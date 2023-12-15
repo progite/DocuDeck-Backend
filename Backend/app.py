@@ -7,6 +7,7 @@ import os, datetime
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, get_jwt
 from helper_utils import extract_date
 from flask_cors import CORS
+from constants import USER_1, USER_2, USER_3
 
 app = Flask(__name__)
 CORS(app)
@@ -23,6 +24,43 @@ with app.app_context():
 
 if __name__ == "-__main__":
     app.run()
+
+@app.route("/sign-up", methods= ["PUT"])
+def sign_up():
+    #email, password, user type
+    content = request.get_json()
+    user_id = str(uuid.uuid4())
+    user_email = content['email']
+    user_password = content['password']
+    user_type = content['userType']
+
+    #if policymaker
+    if user_type == USER_1:
+        status = policy_db.add_policymaker(user_id, user_email, user_password)
+    elif user_type == USER_2:
+        status = tender_db.add_tender_authority(user_id, user_email, user_password)
+    elif user_type == USER_3:
+        #TODO: add bidder db 
+        bidder_db = 'add later'
+    else:
+        return "Invalid User Type", 400
+
+    if status:
+        return jsonify("User added successfully"), 200
+    return jsonify("User could not be added"), 500
+
+@app.route("/login", methods = ["POST"])
+def login():
+    content = request.get_json()
+    user_email = content['email']
+    user_password = content['password']
+    user_type = content['userType']
+
+    status = policy_db.login(user_email, user_password, user_type)
+    
+    if status:
+        return jsonify("Login Successful"), 200
+    return jsonify("Invalid Credentials"), 400
 
 @app.route("/add-policy", methods = ["PUT"])
 def add_policy():
