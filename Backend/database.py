@@ -166,7 +166,7 @@ class TenderDB:
         #create tender db
         try:
             query = '''CREATE TABLE if not exists `TENDERS` ( 
-             `tenderId` VARCHAR(100) NOT NULL,
+             `tenderId` VARCHAR(100) PRIMARY KEY,
              `date` DATE NOT NULL , 
              `tender` MEDIUMBLOB NOT NULL,
              `taId` VARCHAR(100),
@@ -175,10 +175,36 @@ class TenderDB:
         except Exception as e: 
             print(e)
 
-    def fetch_tenders(self):
+    def add_tender(self, tender_id: str, ta_id: str, tender_name: str, date: str, tender):
+        try:
+            tender_fol = r"C:\Users\progg\Desktop\desktop_p\DocuDeck\Tenders"
+            tender_path = os.path.join(tender_fol, tender_name) #store this path in db
+            if not os.path.exists(tender_fol):
+                os.makedirs(tender_fol)
+            tender.save(tender_path)
+            
+            #TODO: check compliance and if compliant
+            cursor = self.mysql.connection.cursor()
+            query = '''INSERT INTO TENDERS(tenderId, date, tender, taId) VALUES(%s, %s, %s, %s)'''
+            cursor.execute(query, (tender_id, date, tender_path, ta_id,))
+            self.mysql.connection.commit()
+            
+            cursor.close()
+            return 1
+
+            #if not compliant
+            return 0    
+
+        except Exception as e:
+            print(e)
+            return 0
+
+    def fetch_tenders(self, ta_id: str):
         try:
             cursor = self.mysql.connection.cursor()
-            cursor.execute("SELECT * FROM TENDERS")
+            query = ('''SELECT * FROM TENDERS WHERE
+                              taId = %s OR %s IS NULL''')
+            cursor.execute(query, (ta_id, ta_id,))
             tenders_list = cursor.fetchall()
             return tenders_list
             

@@ -25,13 +25,14 @@ if __name__ == "-__main__":
     app.run()
 
 @app.route("/add-policy", methods = ["PUT"])
-def add_policy_to_db():
+def add_policy():
     
     #TODO: add policy uploader id
     if 'policy' in request.files:
         pm_id = request.form['pmId']
         policy_name = request.form['policyName']
-        if policy_db.add_policy(pm_id, request.files['policy'], policy_name):
+        policy = request.files['policy']
+        if policy_db.add_policy(pm_id, policy, policy_name):
             return "Policy added to database", 200
         return "Could not add policy", 500
     
@@ -39,7 +40,6 @@ def add_policy_to_db():
     
 @app.route("/search-policies", methods= ['POST'])
 def search_policies():
-
     content = request.get_json()
     #TODO: consider tags too
     policy_id = content['policy_id']
@@ -59,16 +59,26 @@ def search_policies():
         return jsonify(policies_list), 200
     return "Details could not be fetched", 500 #server side error
 
-#fetch all tenders
+@app.route("/add-tender", methods=['POST'])
+def add_tender():
+    if 'tender' in request.files:
+        tender_id = request.form['tenderId'] #make tender reference number into this 
+        ta_id = request.form['taId']
+        tender_name = request.form['tenderName']
+        date = request.form['date']
+        tender = request.files['tender']
+        if tender_db.add_tender(tender_id, ta_id, tender_name, date, tender):
+            return "Tender added to database", 200
+        return "Could not add tender", 500
+    
+    return "Invalid Request", 400
+    
+#fetch all tenders/for one user
 @app.route("/fetch-tenders", methods= ['GET'])
 def fetch_tendors():
-    #takes no arguments
-    tenders_list = tender_db.fetch_tenders()
-    print("[DEBUG]", tenders_list)
+    ta_id = request.args.get('taId') #has to be NULL if it is not to be provided
+    ta_id = ta_id if ta_id else None
+    tenders_list = tender_db.fetch_tenders(ta_id)
     return jsonify(tenders_list), 200
-
-#fetch tenders for one user 
-
-#compilance check of tender with respective rules 
 
 #tenders against bidders which bidder has bidded for that tender
