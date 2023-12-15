@@ -120,20 +120,23 @@ class PolicyDB:
             #TODO: Fix cursor fetch. This is unsafe and gives 0 if data not present in table 
             dept_id = cursor.execute(f"SELECT deptId FROM DEPARTMENT WHERE deptName = '{dept}'", )
             min_id = cursor.execute(f"SELECT minId FROM MINISTRY WHERE minName = '{ministry}'", )
-            print(dept_id, min_id)
-            query = '''SELECT policyId FROM POLICIES WHERE 
-                        deptId = %s AND minId = %s and date = %s 
+            print(dept_id, min_id, date)
+            query = '''SELECT policyid FROM POLICIES WHERE 
+                        (pmId = %s OR %s is NULL)
+                        AND (deptId = %s OR %s IS NULL) 
+                        AND (minId = %s OR %s IS NULL) 
+                        AND (date = %s OR %s IS NULL)
+                        AND (date BETWEEN %s AND %s) 
                         '''
-            cursor.execute(query, (dept_id, min_id, date))
+            cursor.execute(query, (policy_id, policy_id, dept_id, dept_id, min_id, min_id, date, date, date_from, date_to))
             policy_list = cursor.fetchall()
-            print("[DEBUG WORKS]", policy_list)
-            return policy_list    
+            return policy_list 
+           
         except Exception as e:
-            print("[DEBUG]", e)
+            print(e)
             return 0
     
             
-# select * from policies where policyId = "", date = "2023-11-30",
 #how is connection handled in mysqldb 
 class TenderDB:
     def __init__(self, mysql:MySQL) -> None:
@@ -163,6 +166,18 @@ class TenderDB:
             cursor.execute(query)
         except Exception as e: 
             print(e)
+
+    def fetch_tenders(self):
+        try:
+            cursor = self.mysql.connection.cursor()
+            cursor.execute("SELECT * FROM TENDERS")
+            tenders_list = cursor.fetchall()
+            return tenders_list
+            
+        except Exception as e:
+            print("[DEBUG]", e)
+            return 0
+    
 
     def store_tender(self, ):
         pass

@@ -6,11 +6,10 @@ import database as database
 import os, datetime
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, get_jwt
 from helper_utils import extract_date
+from flask_cors import CORS
 
 app = Flask(__name__)
-
-app.config['JWT_SECRET_KEY'] = str(uuid.uuid4())
-jwt = JWTManager(app)
+CORS(app)
 
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'password'
@@ -26,16 +25,14 @@ if __name__ == "-__main__":
     app.run()
 
 @app.route("/add-policy", methods = ["PUT"])
-# @jwt_required()
-def add_report_to_db():
-    # current_user = get_jwt_identity()
-    # user_account_type = get_jwt()['Account Type']
-
-    #extract policy uploader id from jwt token
+def add_policy_to_db():
+    
     content = request.get_json()
-    policy_id = content['policy_id']
-    date = content['date']
-    date = extract_date(date)
+    # policy_id = content['policy_id']
+    # date = content['date']
+    # date = extract_date(date)
+    policy_id = 1
+    date = extract_date("2023-10-10")
     policy = content['policy']
     pmId = 1
     with app.app_context():
@@ -44,19 +41,37 @@ def add_report_to_db():
             
     return "ok", 200
 
-@app.route("/search-policies", methods= ['GET'])
+@app.route("/search-policies", methods= ['POST'])
 def search_policies():
     content = request.get_json()
     #TODO: consider tags too
     policy_id = content['policy_id']
-    date = extract_date(content['issue_date'])
+    date = content['issue_date']
+    date = None if not date else extract_date(date)
     date_from = content['date_from']
-    date_from = datetime.date.min if date_from == "" else extract_date(date_from)
+    date_from = datetime.date.min if not date_from else extract_date(date_from)
     date_to = content['date_to']
-    date_to = datetime.date.max if date_to == "" else extract_date(date_to)
+    date_to = datetime.date.max if not date_to else extract_date(date_to)
     dept = content['department']
     ministry = content['ministry']
 
     with app.app_context():
-        policy_db.search_policies(policy_id, date, date_from, date_to, dept, ministry)
-    return "ok", 200
+        policies_list = policy_db.search_policies(policy_id, date, date_from, date_to, dept, ministry)
+    
+    if policies_list:
+        return jsonify(policies_list), 200
+    return "Details could not be fetched", 500 #server side error
+
+#fetch all tenders
+@app.route("/fetch-tenders", methods= ['GET'])
+def fetch_tendors():
+    #takes no arguments
+    tenders_list = tender_db.fetch_tenders()
+    print("[DEBUG]", tenders_list)
+    return jsonify(tenders_list), 200
+
+#fetch tenders for one user 
+
+#compilance check of tender with respective rules 
+
+#tenders against bidders which bidder has bidded for that tender
