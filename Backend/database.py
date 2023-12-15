@@ -1,4 +1,5 @@
 #should the tender and rules database be in separate files?
+import os
 from flask_mysqldb import MySQL
 from flask import current_app
 
@@ -70,7 +71,7 @@ class PolicyDB:
             query = '''CREATE TABLE if not exists `POLICIES` (
                 `policyId` VARCHAR(100) PRIMARY KEY, 
                 `date` DATE NOT NULL,
-                `policy` MEDIUMBLOB NOT NULL,
+                `policy` VARCHAR(500) NOT NULL,
                 `pmId` VARCHAR(100),
                 `deptId` VARCHAR(100), 
                 `minId` VARCHAR(100),
@@ -94,23 +95,29 @@ class PolicyDB:
             cursor.execute(query)
         except Exception as e:
             print(e)
-    def add_policy(self, policy_id: str, date: str, policy, pm_id):
+    def add_policy(self, pm_id, policy, policyname):
         try:
+            policy_fol = r"C:\Users\progg\Desktop\desktop_p\DocuDeck\Scraper\policies\\rulesandprocs"
+            policy_fol = os.path.join(policy_fol, str(pm_id))
+            policy_path = os.path.join(policy_fol, policyname) #store this path in db
+            if not os.path.exists(policy_fol):
+                os.makedirs(policy_fol)
+            policy.save(policy_path)
+            
             cursor = self.mysql.connection.cursor()
-            # report = base64.b64decode(report)
-            # report = compress_data(report)
-            # TODO: ml integration
-            #department, ministry = ml integrate
+            # # TODO: ml integration
+            # #department, ministry = ml integrate
             dept_id = min_id = 1
+            policy_id = 2
+            date = "2023-10-10"
             query = '''INSERT INTO POLICIES(policyId, date, policy, pmId, deptId, minId) VALUES(%s, %s, %s, %s, %s, %s)'''
-            cursor.execute(query, (policy_id, date, policy, pm_id, dept_id, min_id))
+            cursor.execute(query, (policy_id, date, policy_path, pm_id, dept_id, min_id))
             self.mysql.connection.commit()
-            # print("[DEBUG], ENTERED HERE")
             
             cursor.close()
             return 1
         except Exception as e:
-            print("[DEBUG]", e)
+            print(e)
             return 0
 
     def search_policies(self, policy_id: str, date: str, date_from: str, date_to: str, dept: str, ministry: str):
@@ -121,7 +128,7 @@ class PolicyDB:
             dept_id = cursor.execute(f"SELECT deptId FROM DEPARTMENT WHERE deptName = '{dept}'", )
             min_id = cursor.execute(f"SELECT minId FROM MINISTRY WHERE minName = '{ministry}'", )
             print(dept_id, min_id, date)
-            query = '''SELECT policyid FROM POLICIES WHERE 
+            query = '''SELECT policy FROM POLICIES WHERE 
                         (pmId = %s OR %s is NULL)
                         AND (deptId = %s OR %s IS NULL) 
                         AND (minId = %s OR %s IS NULL) 
@@ -129,8 +136,9 @@ class PolicyDB:
                         AND (date BETWEEN %s AND %s) 
                         '''
             cursor.execute(query, (policy_id, policy_id, dept_id, dept_id, min_id, min_id, date, date, date_from, date_to))
-            policy_list = cursor.fetchall()
-            return policy_list 
+            policy_list = cursor.fetchall() 
+            print("[DEBUG] POLICY_LIST", policy_list)
+            return policy_list #sending back list of policy names
            
         except Exception as e:
             print(e)

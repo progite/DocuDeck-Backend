@@ -27,22 +27,19 @@ if __name__ == "-__main__":
 @app.route("/add-policy", methods = ["PUT"])
 def add_policy_to_db():
     
-    content = request.get_json()
-    # policy_id = content['policy_id']
-    # date = content['date']
-    # date = extract_date(date)
-    policy_id = 1
-    date = extract_date("2023-10-10")
-    policy = content['policy']
-    pmId = 1
-    with app.app_context():
-        policy_db.add_policy(policy_id, date, policy, pmId)
-    print("[DEBUG], ENTERED HERE")
-            
-    return "ok", 200
-
+    #TODO: add policy uploader id
+    if 'policy' in request.files:
+        pm_id = request.form['pmId']
+        policy_name = request.form['policyName']
+        if policy_db.add_policy(pm_id, request.files['policy'], policy_name):
+            return "Policy added to database", 200
+        return "Could not add policy", 500
+    
+    return "Invalid Request", 400
+    
 @app.route("/search-policies", methods= ['POST'])
 def search_policies():
+
     content = request.get_json()
     #TODO: consider tags too
     policy_id = content['policy_id']
