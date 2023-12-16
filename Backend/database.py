@@ -8,11 +8,11 @@ from constants import USER_1, USER_2, USER_3
 #Could have maintained combined db for all users with diff user types but then have to implement diff authorization rules. 
 #This is more compact
 
+#TODO: Include email fields in primary key
+
 class PolicyDB:
     def __init__(self, mysql: MySQL) -> None:
-        # print(current_app.config)
         self.mysql = mysql
-        # conn = self.mysql.connect()
         cursor = self.mysql.connection.cursor()
 
         #create ministry 
@@ -102,12 +102,19 @@ class PolicyDB:
         except Exception as e:
             print(e)
     
-    def add_policymaker(self, pm_id: str, pm_email: str, pm_password: str):
+    def add_user(self, user_id: str, user_email: str, user_password: str, user_type: str):
         try:
-            pm_password = hash_password(pm_password)
+            user_password = hash_password(user_password)
             cursor = self.mysql.connection.cursor()
-            query = '''INSERT INTO POLICYMAKER(pmId, pmEmail, password) VALUES(%s, %s, %s)'''
-            cursor.execute(query, (pm_id, pm_email, pm_password))
+            
+            #see better way to do this
+            if user_type == USER_1:
+                query = f'''INSERT INTO POLICYMAKER (pmId, pmEmail, password) VALUES(%s, %s, %s)'''
+            elif user_type == USER_2:
+                query = f'''INSERT INTO TENDER_AUTHORITY (taId, taEmail, password) VALUES(%s, %s, %s)'''
+            elif user_type == USER_3:
+                query = f'''INSERT INTO VENDOR (vId, vEmail, password) VALUES(%s, %s, %s)'''
+            cursor.execute(query, (user_id, user_email, user_password)) 
             self.mysql.connection.commit()
             cursor.close()
             return 1
@@ -194,7 +201,7 @@ class TenderDB:
         self.mysql = mysql
         cursor = self.mysql.connection.cursor()
 
-        #create user db
+        #create tender-authority db
         try:
             query = '''CREATE TABLE if not exists `TENDER_AUTHORITY` (
                 `taId` VARCHAR(100) PRIMARY KEY, 
@@ -217,6 +224,33 @@ class TenderDB:
             cursor.execute(query)
         except Exception as e: 
             print(e)
+
+        #create vender db
+        try:
+            query = '''CREATE TABLE IF NOT EXISTS `VENDOR` (
+                `vId` VARCHAR(100) PRIMARY KEY, 
+                `vName` VARCHAR(50), 
+                `vEmail` VARCHAR(100),
+                `password` VARCHAR(100))'''
+            cursor.execute(query)
+        except Exception as e:
+            print(e)
+            return 0
+        
+        #create tender-vendor mapping
+        try:
+            query = '''CREATE TABLE IF NOT EXISTS `TENDER_VENDOR` (
+                `tenderId` VARCHAR(100), 
+                `vId` VARCHAR(100),
+                `document` VARCHAR(500),
+                FOREIGN KEY(`tenderId`) REFERENCES `TENDERS`(`tenderId`),
+                FOREIGN KEY(`vId`) REFERENCES `VENDOR`(`vId`),
+                PRIMARY KEY (tenderId, vId, document))'''
+            cursor.execute(query)
+        except Exception as e:
+            print(e)
+            return 0
+        
 
     def add_tender(self, tender_id: str, ta_id: str, tender_name: str, date: str, tender):
         try:
@@ -255,16 +289,49 @@ class TenderDB:
             print("[DEBUG]", e)
             return 0
 
-# class BidderDB:
-    # def __init__(self, mysql) -> None:
-    #     #Info about Bidders
-    #     self.mysql = mysql
-    #     conn = self.mysql.connect()
-    #     cursor = conn.cursor()
+    def add_vendor(self, vid: str, vemail: str, vpassword):
+        try:
+            vpassword = hash_password(vpassword)
+            cursor = self.mysql.connection.cursor()
+            query = '''INSERT INTO VENDER(vId, vEmail, password) VALUES(%s, %s, %s)'''
+            cursor.execute(query, (vid, vemail, vpassword))
+            self.mysql.connection.commit()
+            cursor.close()
+            return 1
+        
+        except Exception as e:
+            print(e)
+            return 0
 
-    #     #create user db
-    #     #create bidder db
-    #     cursor.close()
-    #     conn.close()
+    def add_bid(self, vid: str, tender_id: str, documents:list, dnames: list[str]):
+        try:
+            cursor = self.mysql.connection.cursor()
+            docu_fol = r"C:\Users\progg\Desktop\desktop_p\DocuDeck\VendorDocs"
+            docu_fol = os.path.join(docu_fol, str(tender_id), str(vid)) #each doducment will be stored under that vendor id under that tendor 
+            if not os.path.exists(docu_fol):
+                os.makedirs(docu_fol)
+            for idx, document in enumerate(documents):
+                #TODO: Check compliance with tender
+                docu_path = os.path.join(docu_fol, dnames[idx])
+                document.save(docu_path)
+                query = '''INSERT INTO TENDER_VENDOR(tenderId, vId, document) VALUES (%s, %s, %s)'''
+                cursor.execute(query, (tender_id, vid, docu_path))
+                self.mysql.connection.commit()
+            cursor.close()
+            return 1
+        except Exception as e:
+            print(e)
+            return 0
 
-
+    #fetch all bidders and their uploaded documents for the tender
+    def fetch_bid(self, tender_id: str):
+        try:
+            cursor = self.mysql.connection.cursor()
+            query = '''SELECT * FROM TENDER_VENDOR WHERE `tenderId` = %s'''
+            cursor.execute(query, (tender_id, ))
+            vendors_docs = cursor.fetchall()
+            cursor.close()
+            return vendors_docs
+        except Exception as e:
+            print(e)
+            return 0

@@ -34,17 +34,10 @@ def sign_up():
     user_password = content['password']
     user_type = content['userType']
 
-    #if policymaker
-    if user_type == USER_1:
-        status = policy_db.add_policymaker(user_id, user_email, user_password)
-    elif user_type == USER_2:
-        status = tender_db.add_tender_authority(user_id, user_email, user_password)
-    elif user_type == USER_3:
-        #TODO: add bidder db 
-        bidder_db = 'add later'
-    else:
+    if user_type not in [USER_1, USER_2, USER_3]:
         return "Invalid User Type", 400
 
+    status = policy_db.add_user(user_id, user_email, user_password, user_type)
     if status:
         return jsonify("User added successfully"), 200
     return jsonify("User could not be added"), 500
@@ -100,6 +93,7 @@ def search_policies():
 @app.route("/add-tender", methods=['POST'])
 def add_tender():
     if 'tender' in request.files:
+        #this will be uploaded 
         tender_id = request.form['tenderId'] #make tender reference number into this 
         ta_id = request.form['taId']
         tender_name = request.form['tenderName']
@@ -119,4 +113,35 @@ def fetch_tendors():
     tenders_list = tender_db.fetch_tenders(ta_id)
     return jsonify(tenders_list), 200
 
+@app.route("/add-bid", methods=['POST'])
+def add_bid():
+    #multiple files can be there
+    file_list = list()
+    file_names = list()
+    for file in request.files.getlist('file'):
+        file_list.append(file)      
+        file_names.append(file.filename)
+    
+    vid = request.form['vId']
+    tender_id = request.form['tenderId']
+
+    status = tender_db.add_bid(vid, tender_id, file_list, file_names)
+    if status:
+        return jsonify("Bid Added Successfully"), 200
+    
+    return jsonify("Could not add bid"), 500
+
+@app.route("/fetch-bid", methods=["GET"])
+def fetch_bid():
+    tender_id = request.args.get('tenderId')
+    status = tender_db.fetch_bid(tender_id)
+    
+    return jsonify(status), 200 if status else 500
+
 #tenders against bidders which bidder has bidded for that tender
+#against each tender, bidder and their uploaded docs
+
+#Bidders upload documents-against tender
+
+#1 db for tender-bidder mapping (1 endpoint)
+#bidder max docs upload - 5
