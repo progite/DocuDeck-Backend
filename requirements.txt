@@ -1,7 +1,36 @@
-beautifulsoup4
-urllib3
-selenium
-Flask-ext
-flask-mysql
+# beautifulsoup4
+# urllib3
+# selenium
+Flask
+# Flask-ext
+# flask-mysql
 Flask-JWT-Extended
 Flask-MySQLdb
+# pytesseract
+# pdf2image
+# spacy
+# rake-nltk
+# #python -m spacy download en_core_web_sm
+# PyMuPDF
+#fitz
+flask-cors
+bcrypt
+# sumy
+
+
+
+
+
+
+#rule 
+1. extract date, dept, ministry, circular number, keywords [Done]
+2. extract which dept(s) this circular applies to  
+3. keyword matching with input words
+
+
+#tender 
+1. extract the dept
+2. check the compliance of the tender against the existing rules for that dept from existing rule base
+
+#vendor 
+1. check basic documents
