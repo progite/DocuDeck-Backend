@@ -9,7 +9,8 @@ import sih2
 import datetime
 from policy_extract import policy_extract_map
 from tags_similarity_map import keyword_tagid_map
-from tender_rule_similarity_ml import find_similarity
+import tender_rule_similarity_ml
+# from tender_rule_similarity_ml import find_similarity
 #Could have maintained combined db for all users with diff user types but then have to implement diff authorization rules. 
 #This is more compact
 
@@ -232,6 +233,7 @@ class PolicyDB:
             print("[DEBUG] RULES EXTRACTION", ministry, date, policy_id)
             #search department db for dept and get deptid
             # dept_id = self.find_dept(department.lower())
+            
             min_id = self.find_min(ministry.lower())
             print("THE MINISTRY NAME ISSSSSSSS", min_id, flush= True)
             if date is None:
@@ -254,7 +256,21 @@ class PolicyDB:
             print(e)
             return 0
 
-    def search_policies(self, policy_id: str, date: str, date_from: str, date_to: str, dept: str, ministry: str):
+    def extract_tags(self):
+        try:
+            cursor = self.mysql.connection.cursor()
+            query = '''SELECT * FROM TAGS'''
+            cursor.execute(query)
+            tags_list = cursor.fetchall()
+            tags_dict = {}
+            for tag in tags_list:
+                tags_dict[tag[0]] = tag[1]
+            return tags_dict
+        except Exception as e:
+            print(e)
+            return 0
+    
+    def search_policies(self, policy_id: str, date: str, date_from: str, date_to: str, dept: str, ministry: str, keywords):
         try:
             cursor = self.mysql.connection.cursor()
             #first get dept and ministry from pmid
@@ -275,18 +291,19 @@ class PolicyDB:
             # policy_list = cursor.fetchall() 
             # print("[DEBUG] POLICY_LIST", policy_list)
             # return policy_list #sending back list of policy names
-            keywords = ['Medium Enterprises']
-            matching_tag_ids = []
-            for keyword in keywords:
-                if matching_tag_ids == []:
-                    matching_tag_ids = keyword_tagid_map[keyword]
-                else:
-                    matching_tag_ids = matching_tag_ids and keyword_tagid_map[keyword]
-
+            
+            
+            tags_dict = self.extract_tags()
+            # print("[DEBUG] TAGS", tags_dict)
+            # keywords = ['Medium Enterprises']
+            matching_tag_ids = tender_rule_similarity_ml.keyword_similarity(keywords, tags_dict)
+            
+            print("[DEBUG] MATCHING TAG IDS", matching_tag_ids)
             matching_policy_ids = []
             for tag_id in matching_tag_ids:
                 cursor.execute("SELECT policyId FROM POLICY_TAGS WHERE tagId = %s", (tag_id, ))
                 pids = cursor.fetchall()
+                print("[DEBUG] PIDS", pids)
                 for pid in pids:
                     print("[DEBUG], PIDS ERROR WTFFFFF", pid, flush= True)
                     if pid:
@@ -387,7 +404,6 @@ class TenderDB:
             print(e)
             return 0
         
-
     def add_tender(self, tender_id: str, ta_id: str, tender_name: str, date: str, tender):
         try:
             tender_fol = r"C:\Users\progg\Desktop\desktop_p\DocuDeck\Tenders"
@@ -396,8 +412,10 @@ class TenderDB:
                 os.makedirs(tender_fol)
             tender.save(tender_path)
             
-            #TODO: check compliance and if compliant
-            compliance_scores = find_similarity(tender_path)
+            #TODO: Find docs to upload for tender & who is eligible to participate in tender
+            tender_requirements = tender_rule_similarity_ml.find_tender_requirements(tender_path)
+            print("[DEBUG] TENDER REQUIREMENTS", tender_requirements)
+            compliance_scores = tender_rule_similarity_ml.find_similarity(tender_path)
             print(compliance_scores)
             cursor = self.mysql.connection.cursor()
             query = '''INSERT INTO TENDERS(tenderId, date, tender, taId) VALUES(%s, %s, %s, %s)'''
@@ -449,6 +467,8 @@ class TenderDB:
             if not os.path.exists(docu_fol):
                 os.makedirs(docu_fol)
             for idx, document in enumerate(documents):
+                #TODO: extract documents to upload, which services can apply to that tender
+                #TODO: (chatbot) if I am eligible to do it
                 #TODO: Check compliance with tender
                 docu_path = os.path.join(docu_fol, dnames[idx])
                 document.save(docu_path)

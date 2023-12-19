@@ -11,6 +11,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
+import os
 
 from sumy.parsers.plaintext import PlaintextParser  # it gives summary of text in input number of lines.
 from sumy.nlp.tokenizers import Tokenizer
@@ -19,6 +20,79 @@ from sumy.summarizers.text_rank import TextRankSummarizer
 import fitz  # PyMuPDF Extract text from pdf.
 import pytesseract
 from PIL import Image
+import re
+import torch
+from transformers import BertTokenizer, BertModel
+from scipy.spatial.distance import cosine
+
+# Load pre-trained model and tokenizer
+model_name = 'bert-base-uncased'
+tokenizer = BertTokenizer.from_pretrained(model_name)
+model = BertModel.from_pretrained(model_name)
+
+# Function to get BERT embeddings for a sentence
+def get_bert_embeddings(sentence):
+    inputs = tokenizer(sentence, return_tensors='pt', max_length=512, truncation=True)
+    with torch.no_grad():
+        outputs = model(**inputs)
+    embeddings = outputs.last_hidden_state.mean(dim=1).squeeze()
+    return embeddings
+
+# Function to find similarity between a keyword and dictionary values based on BERT embeddings
+def find_similarity_with_dict(keyword, my_dict):
+    keyword_embedding = get_bert_embeddings(keyword)
+
+    similarity_scores = {}
+    for key in my_dict:
+        value = my_dict[key]
+    # for key, value in my_dict.items():
+        value_embedding = get_bert_embeddings(value)
+        similarity = 1 - cosine(keyword_embedding, value_embedding)
+        similarity_scores[key] = similarity
+
+    # Sort the dictionary by similarity scores and get the top 3 keys
+    similar_keys = sorted(similarity_scores, key=similarity_scores.get, reverse=True)[:3]
+    return similar_keys
+
+def keyword_similarity(keywords, tags):
+    matching_policy_ids = []
+    for keyword in keywords:
+        matching_policy_ids.extend(find_similarity_with_dict(keyword, tags))
+    return matching_policy_ids
+        
+# def extract_text_from_pdf(pdf_path):
+#     text = ''
+#     pdf_document = fitz.open(pdf_path)
+#     num_pages = pdf_document.page_count
+
+#     for page_number in range(num_pages):
+#         page = pdf_document.load_page(page_number)
+#         images = page.get_images(full=True)  # Get all images in the page
+
+#         if images:
+#             for img_index, img_info in enumerate(images):
+#                 xref = img_info[0]
+#                 base_image = pdf_document.extract_image(xref)
+#                 image_bytes = base_image["image"]
+
+#                 # Save the image as a temporary file
+#                 temp_image = f"temp_image_{page_number}_{img_index}.png"
+#                 with open(temp_image, 'wb') as temp_file:
+#                     temp_file.write(image_bytes)
+
+#                 # Perform OCR on the saved image file
+#                 extracted_text = pytesseract.image_to_string(Image.open(temp_image))
+#                 text += extracted_text + "\n"  # Add a new line after each image's text
+
+#                 # Remove the temporary image file
+#                 import os
+#                 os.remove(temp_image)
+
+#         else:
+#             text += page.get_text()
+
+#     pdf_document.close()
+#     return text, num_pages
 
 def extract_text_from_pdf(pdf_path):
     text = ''
@@ -45,11 +119,11 @@ def extract_text_from_pdf(pdf_path):
                 text += extracted_text + "\n"  # Add a new line after each image's text
 
                 # Remove the temporary image file
-                import os
                 os.remove(temp_image)
 
-        else:
-            text += page.get_text()
+        # Always perform OCR for text extraction
+        extracted_text = page.get_text()
+        text += extracted_text + "\n"  # Add a new line after each page's text
 
     pdf_document.close()
     return text, num_pages
@@ -80,6 +154,30 @@ def Summarize_doc(pdf_text, num_pages):
 
     return tfidf_matrix
 
+def extract_text_between_keywords(paragraph, start_keyword, end_keyword, to_find):
+    pattern = re.compile(f'{start_keyword}(.*?){end_keyword}', re.DOTALL | re.IGNORECASE)
+    match = pattern.search(paragraph)
+
+    if match:
+        extracted_text = match.group(1).strip()
+        # Remove ".pdf" from the extracted text
+        if to_find == 'pdf':
+            extracted_text = extracted_text.replace('.pdf', '')
+        return extracted_text
+    else:
+        return "Pattern not found in the paragraph."
+
+def find_tender_requirements(tender_path):
+    start_keywords = ['Cover Details', 'Qualification']
+    end_keywords = ['Tender Fee Details', 'Independent']
+    to_find = ['pdf', 'eligibility']
+    
+    print("TENDER PATH", tender_path)
+    pdf_text, num_pages = extract_text_from_pdf(tender_path)
+    extracted = {}
+    for idx in range(2):
+        extracted[to_find[idx]] = extract_text_between_keywords(pdf_text, start_keywords[idx], end_keywords[idx], to_find[idx])    
+    return extracted
 # summary=Summarize_doc(pdf_text)
 
 # Display the generated summary
@@ -131,6 +229,7 @@ def find_similarity(tender_path):
     embeddings_tender = list(Summarize_doc(tender_extract, num_pages))
     # tender_summary = list(tender_summary)
     
+    print("[DEBUG] NUMBER OF TENDER RULES", len(embeddings_tender))
     
     similarity_scores = []
     for policy_db1 in embeddings_tender:

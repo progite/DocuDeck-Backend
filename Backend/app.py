@@ -85,8 +85,10 @@ def search_policies():
     dept = content['department']
     ministry = content['ministry']
 
+    keywords = content['keywords']
+    print("[DEBUG] KEYWORDS FETCHED", keywords)
     with app.app_context():
-        policies_list = policy_db.search_policies(policy_id, date, date_from, date_to, dept, ministry)
+        policies_list = policy_db.search_policies(policy_id, date, date_from, date_to, dept, ministry, keywords)
     
     if policies_list:
         return jsonify(policies_list), 200
@@ -99,9 +101,12 @@ def add_tender():
         # tender_id = request.form['tenderId'] #make tender reference number into this 
         tender_id = str(uuid.uuid4())
         ta_id = request.form['taId']
-        tender_name = request.form['tenderName']
+        # tender_name = request.form['tenderName']
         date = request.form['date']
         tender = request.files['tender']
+        print("ENTERS EREEE")
+        
+        tender_name = tender.filename
         status = tender_db.add_tender(tender_id, ta_id, tender_name, date, tender)
         if status:
             return jsonify(status), 200
