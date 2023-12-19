@@ -1,10 +1,15 @@
 #should the tender and rules database be in separate files?
 import os
+import uuid
 from flask_mysqldb import MySQL
 from flask import current_app
 from password_utils import hash_password, check_password
 from constants import USER_1, USER_2, USER_3
-
+import sih2
+import datetime
+from policy_extract import policy_extract_map
+from tags_similarity_map import keyword_tagid_map
+from tender_rule_similarity_ml import find_similarity
 #Could have maintained combined db for all users with diff user types but then have to implement diff authorization rules. 
 #This is more compact
 
@@ -144,6 +149,64 @@ class PolicyDB:
             print(e)
             return 0
 
+    def add_tag(self, tags):
+        try:
+            cursor = self.mysql.connection.cursor()
+            tag_id_list = list()
+            for tag in tags:
+                cursor.execute("SELECT COUNT(tagId) FROM TAGS WHERE tag = %s", (tag,))
+                search = cursor.fetchone()[0]
+                # print("[DEBUG] SEARCH", search)
+                if not search:
+                    tag_id = str(uuid.uuid4())[:10]
+                    cursor.execute("INSERT INTO TAGS VALUES (%s, %s)", (tag_id, tag,))
+                    self.mysql.connection.commit()
+                cursor.execute("SELECT tagId FROM TAGS WHERE tag = %s", (tag,))
+                tag_id_list.append(cursor.fetchone()[0])
+            return tag_id_list
+        except Exception as e:
+            print(e)
+            return 0
+
+    def policy_tag_map(self, policy_id, tag_id_list):
+        try:
+            cursor = self.mysql.connection.cursor()
+            query = "INSERT INTO POLICY_TAGS(tagId, policyId) VALUES(%s, %s)"
+            for tag_id in tag_id_list:
+                cursor.execute(query, (tag_id, policy_id,))
+                self.mysql.connection.commit()
+            cursor.close()
+        except Exception as e:
+            print(e)
+            return 0
+
+    def find_dept(self, dept: str):
+        try:
+            cursor = self.mysql.connection.cursor()
+            query = "SELECT deptId FROM DEPARTMENT WHERE deptname = %s"
+            cursor.execute(query, (dept))
+            dept = cursor.fetchone()
+            if not dept:
+                return ""
+            return dept[0]
+        except Exception as e:
+            print(e)
+            return 0 
+
+    def find_min(self, ministry: str):
+        try:
+            cursor = self.mysql.connection.cursor()
+            query = "SELECT minId FROM MINISTRY WHERE minName = %s"
+            cursor.execute(query, (ministry, ))
+            dept = cursor.fetchone()
+            print("fetched results", dept)
+            if not dept:
+                return ""
+            return dept[0]
+        except Exception as e:
+            print(e)
+            return 0
+
     def add_policy(self, pm_id, policy, policyname):
         try:
             policy_fol = r"C:\Users\progg\Desktop\desktop_p\DocuDeck\Scraper\policies\\rulesandprocs"
@@ -152,19 +215,41 @@ class PolicyDB:
             if not os.path.exists(policy_fol):
                 os.makedirs(policy_fol)
             policy.save(policy_path)
-            
+            print("POLICY PATH", policy_path)
             cursor = self.mysql.connection.cursor()
-            # # TODO: ml integration
-            # #department, ministry = ml integrate
-            dept_id = min_id = 1
-            policy_id = 2
-            date = "2023-10-10"
-            query = '''INSERT INTO POLICIES(policyId, date, policy, pmId, deptId, minId) VALUES(%s, %s, %s, %s, %s, %s)'''
-            cursor.execute(query, (policy_id, date, policy_path, pm_id, dept_id, min_id))
+            # TODO: ml integration
+            details = policy_extract_map[policyname]
+            date = details["Date"]
+            policy_id = details["circular number"]
+            ministry = details["Department"]
+            tags = details["Key_words"]
+
+
+            # TODO: ml integration
+            # rule_text_extract = ml_utils.extract_text_from_pdf(policy_path)
+            # print("TILL THIS DONE CORRECTLYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
+            # date, policy_id, tender_id, department, named_entities, noun_phrases = ml_utils.extract_tender_info(rule_text_extract)
+            print("[DEBUG] RULES EXTRACTION", ministry, date, policy_id)
+            #search department db for dept and get deptid
+            # dept_id = self.find_dept(department.lower())
+            min_id = self.find_min(ministry.lower())
+            print("THE MINISTRY NAME ISSSSSSSS", min_id, flush= True)
+            if date is None:
+                date = datetime.date.today()
+            query = '''INSERT INTO POLICIES(policyId, date, policy, pmId, minId) VALUES(%s, %s, %s, %s, %s)'''
+            cursor.execute(query, (policy_id, date, policy_path, pm_id, min_id))
             self.mysql.connection.commit()
-            
-            cursor.close()
-            return 1
+
+            #now insert keywords in the table
+            tag_id_list = self.add_tag(tags)
+            print("[DEBUG] TAGSLIST", tag_id_list)
+            #if tag not in tags table then insert tag
+            #then map tag and policyid
+            if tag_id_list:
+                self.policy_tag_map(policy_id, tag_id_list)
+                cursor.close()
+                return 1
+            return 0
         except Exception as e:
             print(e)
             return 0
@@ -177,18 +262,69 @@ class PolicyDB:
             dept_id = cursor.execute(f"SELECT deptId FROM DEPARTMENT WHERE deptName = '{dept}'", )
             min_id = cursor.execute(f"SELECT minId FROM MINISTRY WHERE minName = '{ministry}'", )
             print(dept_id, min_id, date)
-            query = '''SELECT policy FROM POLICIES WHERE 
-                        (pmId = %s OR %s is NULL)
-                        AND (deptId = %s OR %s IS NULL) 
-                        AND (minId = %s OR %s IS NULL) 
+            # query = '''SELECT policy FROM POLICIES WHERE 
+            #             (pmId = %s OR %s is NULL)
+            #             AND (deptId = %s OR %s IS NULL) 
+            #             AND (minId = %s OR %s IS NULL) 
+            #             AND (date = %s OR %s IS NULL)
+            #             AND (date BETWEEN %s AND %s) 
+            #             '''
+            
+            # keywords = []
+            # cursor.execute(query, (policy_id, policy_id, dept_id, dept_id, min_id, min_id, date, date, date_from, date_to))
+            # policy_list = cursor.fetchall() 
+            # print("[DEBUG] POLICY_LIST", policy_list)
+            # return policy_list #sending back list of policy names
+            keywords = ['Medium Enterprises']
+            matching_tag_ids = []
+            for keyword in keywords:
+                if matching_tag_ids == []:
+                    matching_tag_ids = keyword_tagid_map[keyword]
+                else:
+                    matching_tag_ids = matching_tag_ids and keyword_tagid_map[keyword]
+
+            matching_policy_ids = []
+            for tag_id in matching_tag_ids:
+                cursor.execute("SELECT policyId FROM POLICY_TAGS WHERE tagId = %s", (tag_id, ))
+                pids = cursor.fetchall()
+                for pid in pids:
+                    print("[DEBUG], PIDS ERROR WTFFFFF", pid, flush= True)
+                    if pid:
+                        print("[DEBUG] PIDDDDDDDDDDD", pid, flush=True)
+                        matching_policy_ids.append(pid[0])
+
+            print("[DEBUG] MATCHING POLICY IDDDDDDDDDDDDS", matching_policy_ids, flush=True)
+
+            query = '''SELECT policyId FROM POLICIES WHERE
+                        (policyId = %s OR %s is NULL)
+                        AND (minId = %s OR %s IS NULL)
                         AND (date = %s OR %s IS NULL)
-                        AND (date BETWEEN %s AND %s) 
+                        AND (date BETWEEN %s AND %s)
                         '''
-            cursor.execute(query, (policy_id, policy_id, dept_id, dept_id, min_id, min_id, date, date, date_from, date_to))
-            policy_list = cursor.fetchall() 
-            print("[DEBUG] POLICY_LIST", policy_list)
-            return policy_list #sending back list of policy names
-           
+            cursor.execute(query, (policy_id, policy_id, min_id, min_id, date, date, date_from, date_to))
+            policy_list = cursor.fetchall()
+
+            print("[DEBUGGGGGGGG] POLICY_ID BEFORE", policy_list, flush=True)
+            policy_id_list = []
+            for pol_id in policy_list:
+                policy_id_list.append(pol_id[0])
+            for pol_id in matching_policy_ids:
+                # policy_list = policy_list[0]
+                # if policy_id_list == []:
+                policy_id_list.append(pol_id)
+                # else:
+                #     policy_id_list.append( = policy_id_list and [pol_id]
+                print("[DEBUGGGGGGG], POLICY ID AFTER", policy_id_list, flush = True)
+            print("[DEBUG] POLICY ID CONCATENATEEEEEEEEEE", policy_id_list, flush=True)
+
+            policy_names = []
+            for policy_id in policy_id_list:
+                cursor.execute("SELECT policy from POLICIES WHERE policyId = %s", (policy_id,))
+                policy_names.append(cursor.fetchone()[0])
+
+            print("[DEBUG] POLICY_NAMES", policy_names, flush=True)
+            return policy_names#sending back list of policy names
+
         except Exception as e:
             print(e)
             return 0
@@ -261,13 +397,15 @@ class TenderDB:
             tender.save(tender_path)
             
             #TODO: check compliance and if compliant
+            compliance_scores = find_similarity(tender_path)
+            print(compliance_scores)
             cursor = self.mysql.connection.cursor()
             query = '''INSERT INTO TENDERS(tenderId, date, tender, taId) VALUES(%s, %s, %s, %s)'''
             cursor.execute(query, (tender_id, date, tender_path, ta_id,))
             self.mysql.connection.commit()
             
             cursor.close()
-            return 1
+            return compliance_scores
 
             #if not compliant
             return 0    

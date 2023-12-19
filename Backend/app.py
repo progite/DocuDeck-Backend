@@ -8,6 +8,7 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 from helper_utils import extract_date
 from flask_cors import CORS
 from constants import USER_1, USER_2, USER_3
+import ml_int
 
 app = Flask(__name__)
 CORS(app)
@@ -19,6 +20,7 @@ app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 
 mysql = MySQL(app)
 with app.app_context():
+    print(mysql)
     policy_db = database.PolicyDB(mysql) #is this accessible outside this segement
     tender_db = database.TenderDB(mysql)
 
@@ -61,8 +63,8 @@ def add_policy():
     #TODO: add policy uploader id
     if 'policy' in request.files:
         pm_id = request.form['pmId']
-        policy_name = request.form['policyName']
         policy = request.files['policy']
+        policy_name = policy.filename
         if policy_db.add_policy(pm_id, policy, policy_name):
             return "Policy added to database", 200
         return "Could not add policy", 500
@@ -94,13 +96,15 @@ def search_policies():
 def add_tender():
     if 'tender' in request.files:
         #this will be uploaded 
-        tender_id = request.form['tenderId'] #make tender reference number into this 
+        # tender_id = request.form['tenderId'] #make tender reference number into this 
+        tender_id = str(uuid.uuid4())
         ta_id = request.form['taId']
         tender_name = request.form['tenderName']
         date = request.form['date']
         tender = request.files['tender']
-        if tender_db.add_tender(tender_id, ta_id, tender_name, date, tender):
-            return "Tender added to database", 200
+        status = tender_db.add_tender(tender_id, ta_id, tender_name, date, tender)
+        if status:
+            return jsonify(status), 200
         return "Could not add tender", 500
     
     return "Invalid Request", 400
@@ -137,6 +141,14 @@ def fetch_bid():
     status = tender_db.fetch_bid(tender_id)
     
     return jsonify(status), 200 if status else 500
+
+@app.route("/policy-chatbot", methods=["GET"])
+def policy_chatbot():
+    question = request.args.get("question")
+    print(question)
+    answer = ml_int.query(question)
+    print("[DEBUG] answer", answer)
+    return answer, 200
 
 #tenders against bidders which bidder has bidded for that tender
 #against each tender, bidder and their uploaded docs
