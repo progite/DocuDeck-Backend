@@ -12,7 +12,6 @@ Flask-MySQLdb
 # rake-nltk
 # #python -m spacy download en_core_web_sm
 # PyMuPDF
-#fitz
 flask-cors
 bcrypt
 # sumy

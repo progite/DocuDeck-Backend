@@ -10,6 +10,8 @@ import datetime
 from policy_extract import policy_extract_map
 from tags_similarity_map import keyword_tagid_map
 import tender_rule_similarity_ml
+from policy_docname_map import policy_doc_map
+import bidder_doc_check
 # from tender_rule_similarity_ml import find_similarity
 #Could have maintained combined db for all users with diff user types but then have to implement diff authorization rules. 
 #This is more compact
@@ -210,7 +212,7 @@ class PolicyDB:
 
     def add_policy(self, pm_id, policy, policyname):
         try:
-            policy_fol = r"C:\Users\progg\Desktop\desktop_p\DocuDeck\Scraper\policies\\rulesandprocs"
+            policy_fol = r"C:\Users\progg\Desktop\desktop_p\DocuDeck\Scraper\policies\rulesandprocs"
             policy_fol = os.path.join(policy_fol, str(pm_id))
             policy_path = os.path.join(policy_fol, policyname) #store this path in db
             if not os.path.exists(policy_fol):
@@ -225,12 +227,16 @@ class PolicyDB:
             ministry = details["Department"]
             tags = details["Key_words"]
 
-
+            print("[DEBUG] BEFORE")
+            date, doc_type, ministry, tags = tender_rule_similarity_ml.extract_policy_info(policy_path)
+            #insert doctype too
+            #TODO: Alter table policies to include type of document
+            
             # TODO: ml integration
             # rule_text_extract = ml_utils.extract_text_from_pdf(policy_path)
             # print("TILL THIS DONE CORRECTLYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
             # date, policy_id, tender_id, department, named_entities, noun_phrases = ml_utils.extract_tender_info(rule_text_extract)
-            print("[DEBUG] RULES EXTRACTION", ministry, date, policy_id)
+            print("[DEBUG] RULES EXTRACTION", ministry, date, policy_id, "AND DOCTYPEEEEEE", doc_type)
             #search department db for dept and get deptid
             # dept_id = self.find_dept(department.lower())
             
@@ -238,20 +244,24 @@ class PolicyDB:
             print("THE MINISTRY NAME ISSSSSSSS", min_id, flush= True)
             if date is None:
                 date = datetime.date.today()
-            query = '''INSERT INTO POLICIES(policyId, date, policy, pmId, minId) VALUES(%s, %s, %s, %s, %s)'''
-            cursor.execute(query, (policy_id, date, policy_path, pm_id, min_id))
-            self.mysql.connection.commit()
-
+            if min_id:
+                query = '''INSERT INTO POLICIES(policyId, date, policy, pmId, minId, docType) VALUES(%s, %s, %s, %s, %s, %s)'''
+                cursor.execute(query, (policy_id, date, policy_path, pm_id, min_id, doc_type))
+                self.mysql.connection.commit()
+            else:
+                query = '''INSERT INTO POLICIES(policyId, date, policy, pmId, docType) VALUES(%s, %s, %s, %s, %s)'''
+                cursor.execute(query, (policy_id, date, policy_path, pm_id, doc_type))
+                self.mysql.connection.commit()
             #now insert keywords in the table
             tag_id_list = self.add_tag(tags)
             print("[DEBUG] TAGSLIST", tag_id_list)
             #if tag not in tags table then insert tag
             #then map tag and policyid
-            if tag_id_list:
-                self.policy_tag_map(policy_id, tag_id_list)
-                cursor.close()
-                return 1
-            return 0
+            # if tag_id_list:
+            self.policy_tag_map(policy_id, tag_id_list)
+            cursor.close()
+            return 1
+            # return 0
         except Exception as e:
             print(e)
             return 0
@@ -312,11 +322,11 @@ class PolicyDB:
 
             print("[DEBUG] MATCHING POLICY IDDDDDDDDDDDDS", matching_policy_ids, flush=True)
 
-            query = '''SELECT policyId FROM POLICIES WHERE
-                        (policyId = %s OR %s is NULL)
-                        AND (minId = %s OR %s IS NULL)
-                        AND (date = %s OR %s IS NULL)
-                        AND (date BETWEEN %s AND %s)
+            query = '''SELECT policyId FROM POLICIES 
+                     WHERE policyId = %s OR %s is NULL
+                        AND minId = %s OR %s IS NULL
+                        AND date = %s OR %s IS NULL
+                        AND date BETWEEN %s AND %s
                         '''
             cursor.execute(query, (policy_id, policy_id, min_id, min_id, date, date, date_from, date_to))
             policy_list = cursor.fetchall()
@@ -337,7 +347,10 @@ class PolicyDB:
             policy_names = []
             for policy_id in policy_id_list:
                 cursor.execute("SELECT policy from POLICIES WHERE policyId = %s", (policy_id,))
-                policy_names.append(cursor.fetchone()[0])
+                name = cursor.fetchone()[0]
+                print("[DEBUG] NAME", name)
+                if name and policy_names:
+                    policy_names.append(name)
 
             print("[DEBUG] POLICY_NAMES", policy_names, flush=True)
             return policy_names#sending back list of policy names
@@ -345,8 +358,7 @@ class PolicyDB:
         except Exception as e:
             print(e)
             return 0
-    
-            
+      
 #how is connection handled in mysqldb 
 class TenderDB:
     def __init__(self, mysql:MySQL) -> None:
@@ -404,7 +416,21 @@ class TenderDB:
             print(e)
             return 0
         
-    def add_tender(self, tender_id: str, ta_id: str, tender_name: str, date: str, tender):
+        try:
+            query = '''CREATE TABLE IF NOT EXISTS `TENDER_REQUIREMENTS` (
+                `tenderId` VARCHAR(100),
+                `documents` VARCHAR(5000),
+                `eligibility` VARCHAR(5000),
+                FOREIGN KEY(`tenderId`) REFERENCES `TENDERS`(`tenderId`),
+                PRIMARY KEY (tenderId))'''
+            cursor.execute(query)
+        except Exception as e:
+            print(e)
+            return 0
+        
+        
+    #check compliance
+    def add_tender(self, tender_id: str, ta_id: str, tender_name: str, tender):
         try:
             tender_fol = r"C:\Users\progg\Desktop\desktop_p\DocuDeck\Tenders"
             tender_path = os.path.join(tender_fol, tender_name) #store this path in db
@@ -412,21 +438,52 @@ class TenderDB:
                 os.makedirs(tender_fol)
             tender.save(tender_path)
             
+            policy_scores = tender_rule_similarity_ml.complaince_checking_updated(tender_path)
+            print("Policy SCORES UPDATEDDDDD", policy_scores)
+            return policy_scores
+            
+            policy_compliance_scores = tender_rule_similarity_ml.find_similarity(tender_path)
+            subset_policies = {k: v for k, v in policy_compliance_scores.items() if k.startswith("Policy") and int(k[6:]) <= 10}
+            print("SUBSET POLICIES", subset_policies)
+            # Sort the subset in descending order by score
+            sorted_policies = sorted(subset_policies.items(), key=lambda item: item[1], reverse=True)
+            
+            policy_name_scores = {}
+            for policy in sorted_policies:
+                policy_name_scores[policy_doc_map(policy)] = sorted_policies[policy]
+            print(sorted_policies)    
+            return sorted_policies
+        
+        except Exception as e:
+            print(e)
+            return 0
+
+    def publish_tender(self, tender_id: str, ta_id: str, tender_name: str, date: str, tender):
+        try:
+            tender_fol = r"C:\Users\progg\Desktop\desktop_p\DocuDeck\Tenders"
+            tender_path = os.path.join(tender_fol, tender_name) #store this path in db
+            if not os.path.exists(tender_fol):
+                os.makedirs(tender_fol)
+            tender.save(tender_path)
+            
+            cursor = self.mysql.connection.cursor()
+            
             #TODO: Find docs to upload for tender & who is eligible to participate in tender
             tender_requirements = tender_rule_similarity_ml.find_tender_requirements(tender_path)
+            docs, eligibility = tender_requirements['pdf'], tender_requirements['eligibility']
+            #insert tender requirements into the respective table
+            
             print("[DEBUG] TENDER REQUIREMENTS", tender_requirements)
-            compliance_scores = tender_rule_similarity_ml.find_similarity(tender_path)
-            print(compliance_scores)
-            cursor = self.mysql.connection.cursor()
             query = '''INSERT INTO TENDERS(tenderId, date, tender, taId) VALUES(%s, %s, %s, %s)'''
             cursor.execute(query, (tender_id, date, tender_path, ta_id,))
             self.mysql.connection.commit()
             
+            query = '''INSERT INTO TENDER_REQUIREMENTS(tenderId, documents, eligibility) VALUES (%s, %s, %s)'''
+            cursor.execute(query, (tender_id, docs, eligibility))
+            self.mysql.connection.commit()
+            
             cursor.close()
-            return compliance_scores
-
-            #if not compliant
-            return 0    
+            return 1
 
         except Exception as e:
             print(e)
@@ -493,3 +550,48 @@ class TenderDB:
         except Exception as e:
             print(e)
             return 0
+
+    def bid_chatbot(self, question: str, tender_id: str):
+        try:
+            cursor = self.mysql.connection.cursor()
+            query = '''SELECT eligibility from TENDER_REQUIREMENTS WHERE tenderId = %s'''
+            cursor.execute(query, (tender_id,))
+            eligibility = cursor.fetchone()
+            response = []
+            if eligibility:
+                eligibility = eligibility[0]
+                print("ELIGIBILITY", eligibility)
+                response = tender_rule_similarity_ml.bid_chatbot(question, eligibility)
+                print('DEBUGGGGGGGGGGGGGGGG', response)
+            return response["answer"]
+        except Exception as e:
+            print(e)
+            return 0
+            
+    def bid_documents_check(self, docs):
+        try:
+            cursor = self.mysql.connection.cursor()
+            ai_cmmts = {}
+            #store doc name against comments: passed or not
+            for doc in docs:
+                docname = doc.filename
+                 #store the doc locally 
+                bidder_doc_fol = r"C:\Users\progg\Desktop\desktop_p\DocuDeck\MachineLearning\Bidder_Docs"
+                if 'aadhar' in docname:
+                    bidder_doc_path = os.path.join(bidder_doc_fol, "aadhar", docname)
+                    doc.save(bidder_doc_path)
+                    print("ENTERED HERE DOCPATH", bidder_doc_path)
+                    status = bidder_doc_check.process_pdf_and_check_correctness(bidder_doc_path)
+                    ai_cmmts[docname] = status
+                else:
+                    bidder_doc_path = os.path.join(bidder_doc_fol, "pan", docname)
+                    doc.save(bidder_doc_path)
+                    print("ENTERED HERE DOCPATH", bidder_doc_path)
+                    status = bidder_doc_check.process_pan_card(bidder_doc_path)
+                    ai_cmmts[docname] = status
+            return ai_cmmts
+        
+        except Exception as e:
+            print(e)
+            return 0
+        

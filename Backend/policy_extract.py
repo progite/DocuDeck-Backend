@@ -2,6 +2,7 @@ policy_extract_map = {
 "15.pdf" : {"Date": "2017-04-18",
            "circular number": 123,
            "Department": "Ministry of Finance",
+        #    "doctype": 
            "Key_words": ['pees', 'e ae\neee', 'Rte', 'a\nA', 'Procurement', 'Consultancy', 'Other Services', '2017\nGovernment', 'India\nMinistry', 'Finance\nDepartment', 'Expenditure', 'FOREWORD', 'Government organizations', 'a wide variety', 'goods', 'services', 'execution', 'works', 'pursuance', 'their duties'
                          ] },
 

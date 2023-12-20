@@ -13,10 +13,13 @@ def download_file(filename: str, link: str):
 
 def extract_pdfs(base: str):
     
-    queries = ["rulesandprocs", "staterulesandprocs"]
+    # queries = ["rulesandprocs", "staterulesandprocs"]
+    queries = ['policies']
     for query in queries:
-        url = base + query
-        folder_loc = ''
+        # url = base + query
+        url = base
+        folder_loc = r'C:\Users\progg\Desktop\desktop_p\DocuDeck\Scraper\policies\deptDefence'
+        folder_loc = os.path.join(folder_loc, query)
         if not os.path.exists(folder_loc):
             os.mkdir(folder_loc)
 
@@ -34,8 +37,10 @@ def extract_pdfs(base: str):
                 filename = os.path.join(folder_loc, str(idx) + '.pdf')
                 download_file(filename, a_tag['href'])
         
-extract_pdfs("https://eprocure.gov.in/cppp/")
+# extract_pdfs("https://eprocure.gov.in/cppp/")
+# extract_pdfs(r"https://powermin.gov.in/en/circular?field_division_value=All&field_date_value%5Bvalue%5D%5Bdate%5D=&title=procurement%20policy")
 
+extract_pdfs(r"https://cgda.nic.in/index.php?page=manuals")
 def extract_nav_tabs(url: str):
     driver = webdriver.Firefox()
     driver.get(url)

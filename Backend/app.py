@@ -9,6 +9,7 @@ from helper_utils import extract_date
 from flask_cors import CORS
 from constants import USER_1, USER_2, USER_3
 import ml_int
+import tender_rule_similarity_ml
 
 app = Flask(__name__)
 CORS(app)
@@ -101,13 +102,9 @@ def add_tender():
         # tender_id = request.form['tenderId'] #make tender reference number into this 
         tender_id = str(uuid.uuid4())
         ta_id = request.form['taId']
-        # tender_name = request.form['tenderName']
-        date = request.form['date']
         tender = request.files['tender']
-        print("ENTERS EREEE")
-        
         tender_name = tender.filename
-        status = tender_db.add_tender(tender_id, ta_id, tender_name, date, tender)
+        status = tender_db.add_tender(tender_id, ta_id, tender_name, tender)
         if status:
             return jsonify(status), 200
         return "Could not add tender", 500
@@ -140,6 +137,17 @@ def add_bid():
     
     return jsonify("Could not add bid"), 500
 
+@app.route("/add-bid-docs", methods=['POST'])
+def add_bid_docs():
+    if 'docs' in request.files:
+        docs_list = request.files.getlist('docs')
+        status = tender_db.bid_documents_check(docs_list)
+        if status:
+            return jsonify(status), 200
+        return jsonify("Could not process document"), 500
+        # print(docs_list, "DEBUGGGGG")
+    return jsonify("Invalid Docs Uploaded"), 400
+
 @app.route("/fetch-bid", methods=["GET"])
 def fetch_bid():
     tender_id = request.args.get('tenderId')
@@ -147,14 +155,31 @@ def fetch_bid():
     
     return jsonify(status), 200 if status else 500
 
-@app.route("/policy-chatbot", methods=["GET"])
-def policy_chatbot():
+@app.route("/bid-chatbot", methods=["GET"])
+def bid_chatbot():
     question = request.args.get("question")
-    print(question)
-    answer = ml_int.query(question)
-    print("[DEBUG] answer", answer)
-    return answer, 200
+    tender_id = request.args.get("tenderId")
+    print(question, tender_id)
+    response = tender_db.bid_chatbot(question, tender_id)
+    if response:
+        return jsonify(response), 200
+    return "Could not fetch response", 500
 
+@app.route("/publish-tender", methods=["POST"])
+def publish_tender():
+    if 'tender' in request.files:
+        tender_id = str(uuid.uuid4())
+        ta_id = request.form['taId']
+        date = request.form['date'] #today's date because if a new tender is being uploaded, it's on that date
+        tender = request.files['tender']
+        print("ENTERS HEREEE")
+        
+        tender_name = tender.filename
+        status = tender_db.publish_tender(tender_id, ta_id, tender_name, date, tender)
+        if status:
+            return jsonify(status), 200
+        return "Could not add tender", 500
+    
 #tenders against bidders which bidder has bidded for that tender
 #against each tender, bidder and their uploaded docs
 

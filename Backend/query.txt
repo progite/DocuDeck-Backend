@@ -1,0 +1,14 @@
+SELECT policyId FROM POLICIES WHERE
+                        (policyId = 789 OR policyId is NULL)
+                        AND (minId = 1 OR minId IS NULL)
+                        AND (date = "2020-10-03" OR date IS NULL)
+                        AND (date BETWEEN  AND %s)
+
+SELECT policyId FROM POLICIES 
+                      WHERE policyId = 789 OR policyId is NULL
+                      INNER JOIN SELECT policyId from POLICIES 
+                      WHERE minId = 1 OR minId IS NULL
+                      INNER JOIN SELECT policyId from POLICIES 
+                      WHERE date =  OR %s IS NULL
+                      INNER JOIN SELECT policyId from POLICIES 
+                      WHERE AND date BETWEEN %s AND %s
