@@ -1,7 +1,19 @@
 import datetime
+from dateutil import parser
 
 def extract_date(date: str):
-    return datetime.datetime.strptime(date, "%Y-%m-%d")
+    # parsed_date = parser.parse(date, fuzzy=True)
+    # converted_date = parsed_date.strftime('%Y-%m-%d')
+    print("DEBUGGGGG")
+    # return converted_date
+    # if datetime.datetime.strptime()
+    try:
+        return datetime.datetime.strptime(date, "%Y-%m-%d")
+    except excep:
+        print("debug enters hereeee")
+        date = datetime.datetime.strptime(date, '%d.%m.%Y')
+        return date.strftime('%Y-%m-%d')
+        # return 
 
 import base64
 

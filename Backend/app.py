@@ -77,6 +77,8 @@ def search_policies():
     content = request.get_json()
     #TODO: consider tags too
     policy_id = content['policy_id']
+    if policy_id == '':
+        policy_id = None
     date = content['issue_date']
     date = None if not date else extract_date(date)
     date_from = content['date_from']
@@ -84,7 +86,11 @@ def search_policies():
     date_to = content['date_to']
     date_to = datetime.date.max if not date_to else extract_date(date_to)
     dept = content['department']
+    if dept == '':
+        dept = None
     ministry = content['ministry']
+    if ministry == '':
+        ministry = None
 
     keywords = content['keywords']
     print("[DEBUG] KEYWORDS FETCHED", keywords)

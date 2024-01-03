@@ -15,6 +15,7 @@ import bidder_doc_check
 # from tender_rule_similarity_ml import find_similarity
 #Could have maintained combined db for all users with diff user types but then have to implement diff authorization rules. 
 #This is more compact
+from helper_utils import extract_date
 
 #TODO: Include email fields in primary key
 
@@ -221,14 +222,15 @@ class PolicyDB:
             print("POLICY PATH", policy_path)
             cursor = self.mysql.connection.cursor()
             # TODO: ml integration
-            details = policy_extract_map[policyname]
-            date = details["Date"]
-            policy_id = details["circular number"]
-            ministry = details["Department"]
-            tags = details["Key_words"]
+            # details = policy_extract_map[policyname]
+            # date = details["Date"]
+            # policy_id = details["circular number"]
+            # ministry = details["Department"]
+            # tags = details["Key_words"]
 
             print("[DEBUG] BEFORE")
             date, doc_type, ministry, tags = tender_rule_similarity_ml.extract_policy_info(policy_path)
+            date = extract_date(date)
             #insert doctype too
             #TODO: Alter table policies to include type of document
             
@@ -236,7 +238,7 @@ class PolicyDB:
             # rule_text_extract = ml_utils.extract_text_from_pdf(policy_path)
             # print("TILL THIS DONE CORRECTLYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
             # date, policy_id, tender_id, department, named_entities, noun_phrases = ml_utils.extract_tender_info(rule_text_extract)
-            print("[DEBUG] RULES EXTRACTION", ministry, date, policy_id, "AND DOCTYPEEEEEE", doc_type)
+            print("[DEBUG] RULES EXTRACTION", ministry, date, "AND DOCTYPEEEEEE", doc_type)
             #search department db for dept and get deptid
             # dept_id = self.find_dept(department.lower())
             
@@ -245,12 +247,12 @@ class PolicyDB:
             if date is None:
                 date = datetime.date.today()
             if min_id:
-                query = '''INSERT INTO POLICIES(policyId, date, policy, pmId, minId, docType) VALUES(%s, %s, %s, %s, %s, %s)'''
-                cursor.execute(query, (policy_id, date, policy_path, pm_id, min_id, doc_type))
+                query = '''INSERT INTO POLICIES(date, policy, pmId, minId, docType) VALUES(%s, %s, %s, %s, %s)'''
+                cursor.execute(query, (date, policy_path, pm_id, min_id, doc_type))
                 self.mysql.connection.commit()
             else:
-                query = '''INSERT INTO POLICIES(policyId, date, policy, pmId, docType) VALUES(%s, %s, %s, %s, %s)'''
-                cursor.execute(query, (policy_id, date, policy_path, pm_id, doc_type))
+                query = '''INSERT INTO POLICIES(date, policy, pmId, docType) VALUES(%s, %s, %s, %s)'''
+                cursor.execute(query, (date, policy_path, pm_id, doc_type))
                 self.mysql.connection.commit()
             #now insert keywords in the table
             tag_id_list = self.add_tag(tags)
@@ -321,7 +323,7 @@ class PolicyDB:
                         matching_policy_ids.append(pid[0])
 
             print("[DEBUG] MATCHING POLICY IDDDDDDDDDDDDS", matching_policy_ids, flush=True)
-
+            print("ALL VALUES FINAL BEFORE QUERY", policy_id, date, min_id, date_from, date_to)
             query = '''SELECT policyId FROM POLICIES 
                      WHERE policyId = %s OR %s is NULL
                         AND minId = %s OR %s IS NULL
@@ -348,8 +350,8 @@ class PolicyDB:
             for policy_id in policy_id_list:
                 cursor.execute("SELECT policy from POLICIES WHERE policyId = %s", (policy_id,))
                 name = cursor.fetchone()[0]
-                print("[DEBUG] NAME", name)
-                if name and policy_names:
+                # print("[DEBUG] NAME", name)
+                if name not in policy_names:
                     policy_names.append(name)
 
             print("[DEBUG] POLICY_NAMES", policy_names, flush=True)

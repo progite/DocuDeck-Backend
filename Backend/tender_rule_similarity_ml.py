@@ -33,7 +33,7 @@ model_name = 'bert-base-uncased'
 tokenizer = BertTokenizer.from_pretrained(model_name)
 model = BertModel.from_pretrained(model_name)
 
-token_access = "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"     # replace with your hugging face Token
+token_access = ""     # replace with your hugging face Token
 headers = {"Authorization": f"Bearer {token_access}"}
 
 API_URL = "https://api-inference.huggingface.co/models/rsvp-ai/bertserini-bert-base-squad"
