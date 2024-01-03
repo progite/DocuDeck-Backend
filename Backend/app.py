@@ -8,8 +8,6 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 from helper_utils import extract_date
 from flask_cors import CORS
 from constants import USER_1, USER_2, USER_3
-import ml_int
-import tender_rule_similarity_ml
 
 app = Flask(__name__)
 CORS(app)
@@ -21,8 +19,7 @@ app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 
 mysql = MySQL(app)
 with app.app_context():
-    print(mysql)
-    policy_db = database.PolicyDB(mysql) #is this accessible outside this segement
+    policy_db = database.PolicyDB(mysql)
     tender_db = database.TenderDB(mysql)
 
 if __name__ == "-__main__":
@@ -30,7 +27,6 @@ if __name__ == "-__main__":
 
 @app.route("/sign-up", methods= ["PUT"])
 def sign_up():
-    #email, password, user type
     content = request.get_json()
     user_id = str(uuid.uuid4())
     user_email = content['email']
@@ -188,8 +184,4 @@ def publish_tender():
     
 #tenders against bidders which bidder has bidded for that tender
 #against each tender, bidder and their uploaded docs
-
 #Bidders upload documents-against tender
-
-#1 db for tender-bidder mapping (1 endpoint)
-#bidder max docs upload - 5

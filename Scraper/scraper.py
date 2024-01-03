@@ -12,13 +12,13 @@ def download_file(filename: str, link: str):
         file.write(requests.get(link, verify=False).content)
 
 def extract_pdfs(base: str):
-    
+   
     # queries = ["rulesandprocs", "staterulesandprocs"]
     queries = ['policies']
     for query in queries:
         # url = base + query
         url = base
-        folder_loc = r'C:\Users\progg\Desktop\desktop_p\DocuDeck\Scraper\policies\deptDefence'
+        folder_loc = r''
         folder_loc = os.path.join(folder_loc, query)
         if not os.path.exists(folder_loc):
             os.mkdir(folder_loc)
